@@ -1,0 +1,48 @@
+# EEG contrastive learning + cortex localization project
+# Target: Python 3.12, CUDA 12.6 (RTX6000 / L40S — both Ada-class, CUDA 12.x)
+#
+# torch/torchvision/torchaudio are installed separately in setup_venv.sh via
+# PyTorch's own CUDA-specific index, NOT from this file — pip can't pick the
+# right CUDA build from a plain requirements.txt entry.
+#
+# Versions below are minimums, not pins: `pip install -r requirements.txt`
+# will pull the latest release satisfying each constraint, per your
+# preference for up-to-date packages. Re-run `pip freeze > requirements.lock.txt`
+# after your first successful install so you have an exact, reproducible
+# record of what actually got installed on the cluster.
+
+# --- Core scientific stack ---
+numpy>=1.26
+scipy>=1.13
+pandas>=2.2
+scikit-learn>=1.4
+matplotlib>=3.8
+joblib>=1.3
+tqdm>=4.66
+threadpoolctl>=3.4
+
+# --- EEG-specific ---
+mne>=1.7              # ICA, dipole fitting (ECD), montages, topomaps
+librosa>=0.10          # spectrograms (used in the FastICA notebook)
+
+# --- Contrastive / DNN eval extras ---
+umap-learn>=0.5        # embedding visualization
+seaborn>=0.13           # confusion matrices, plots
+
+# --- Data acquisition ---
+openneuro-py>=2024.2.0
+boto3>=1.34             # only needed if you use the aws s3 sync fallback
+
+# --- ICWaves package itself ---
+# Installed separately as an editable local clone in setup_venv.sh
+# (git clone https://github.com/cniel-ud/ICWaves.git && pip install -e ICWaves)
+# NOTE: icwaves.sikmeans.utils already provides pick_random_windows and
+# check_rng, i.e. everything your notebook was importing from the separate
+# `BOWaves` PyPI package. You likely don't need `pip install BOWaves`
+# alongside icwaves — having both risks a dependency/version conflict for
+# no benefit. Drop BOWaves unless you hit a missing function icwaves
+# doesn't cover.
+
+# --- Notebook environment ---
+jupyterlab>=4.2
+ipykernel>=6.29
